@@ -1,9 +1,4 @@
-/* Reset */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }/* ================================================================
+/* ================================================================
    CHEELA SAMEERRAJ — Cybersecurity Portfolio
    style.css  |  Dark Terminal Theme
    ================================================================ */
@@ -13,17 +8,17 @@
 ---------------------------------------------------------------- */
 :root {
   /* Color Palette */
-  --bg-primary:      #050a0e;      /* near-black base */
-  --bg-secondary:    #0a1520;      /* dark navy panels */
-  --bg-card:         #0d1b2a;      /* card surfaces */
+  --bg-primary:      #050a0e;
+  --bg-secondary:    #0a1520;
+  --bg-card:         #0d1b2a;
   --bg-card-hover:   #112233;
 
-  --green:           #00ff9d;      /* primary neon accent */
+  --green:           #00ff9d;
   --green-dim:       #00cc7a;
   --green-glow:      rgba(0, 255, 157, 0.18);
-  --cyan:            #00e5ff;      /* secondary accent */
+  --cyan:            #00e5ff;
   --cyan-dim:        #00b8cc;
-  --red-accent:      #ff2244;      /* danger / highlight */
+  --red-accent:      #ff2244;
 
   --text-primary:    #e0f0ff;
   --text-secondary:  #7a9ab5;
@@ -65,7 +60,7 @@ body {
   color: var(--text-primary);
   line-height: 1.7;
   overflow-x: hidden;
-  cursor: none; /* use custom cursor */
+  cursor: none;
 }
 
 a {
@@ -81,6 +76,7 @@ img { max-width: 100%; display: block; }
 
 /* ----------------------------------------------------------------
    3. CUSTOM CURSOR
+   — Removed ring resize animation; ring now snaps instantly
 ---------------------------------------------------------------- */
 .cursor-dot,
 .cursor-ring {
@@ -90,39 +86,38 @@ img { max-width: 100%; display: block; }
   z-index: 9999;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: opacity 0.3s;
 }
 
 .cursor-dot {
   width: 6px;
   height: 6px;
   background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  /* Removed box-shadow glow to lighten GPU load */
 }
 
 .cursor-ring {
   width: 30px;
   height: 30px;
   border: 1.5px solid var(--green);
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  /* No width/height transition — snaps instead of animating */
 }
 
-/* Hover state toggled by JS */
 body.cursor-hover .cursor-ring {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-color: var(--cyan);
 }
 
 /* ----------------------------------------------------------------
    4. MATRIX CANVAS
+   — Reduced opacity so the canvas compositor layer stays cheaper
 ---------------------------------------------------------------- */
 #matrix-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: 0;
-  opacity: 0.06;
+  opacity: 0.03;          /* was 0.06 */
   pointer-events: none;
 }
 
@@ -155,7 +150,6 @@ body.cursor-hover .cursor-ring {
   background: var(--bg-secondary);
 }
 
-/* Accent color */
 .accent { color: var(--green); }
 .hl {
   color: var(--green);
@@ -210,12 +204,12 @@ body.cursor-hover .cursor-ring {
   background: var(--green);
   color: var(--bg-primary);
   font-weight: 700;
-  box-shadow: 0 0 20px var(--green-glow);
+  box-shadow: 0 0 16px var(--green-glow);    /* was 20px */
 }
 .btn-primary:hover {
   background: var(--cyan);
   color: var(--bg-primary);
-  box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 22px rgba(0, 229, 255, 0.25); /* was 30px */
   transform: translateY(-2px);
 }
 
@@ -231,19 +225,22 @@ body.cursor-hover .cursor-ring {
   transform: translateY(-2px);
 }
 
-/* Reveal animation (triggered by JS IntersectionObserver) */
+/* Reveal animation
+   — Reduced stagger: only first 2 children get a delay
+   — Removed nth-child(3) and (4) delays
+---------------------------------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(20px);        /* was 30px */
+  transition: opacity 0.5s ease, transform 0.5s ease;  /* was 0.7s */
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
-.reveal:nth-child(2) { transition-delay: 0.1s; }
-.reveal:nth-child(3) { transition-delay: 0.2s; }
-.reveal:nth-child(4) { transition-delay: 0.3s; }
+.reveal:nth-child(2) { transition-delay: 0.08s; }  /* was 0.1s */
+.reveal:nth-child(3) { transition-delay: 0.16s; }  /* was 0.2s — kept but shortened */
+/* Removed nth-child(4) delay entirely */
 
 /* ----------------------------------------------------------------
    7. NAVIGATION
@@ -264,10 +261,9 @@ body.cursor-hover .cursor-ring {
 }
 #navbar.scrolled {
   padding: 12px 40px;
-  box-shadow: 0 2px 30px rgba(0, 255, 157, 0.08);
+  box-shadow: 0 2px 20px rgba(0, 255, 157, 0.06);  /* was 30px / 0.08 */
 }
 
-/* Logo */
 .nav-logo {
   font-family: var(--font-mono);
   font-size: 1.3rem;
@@ -280,7 +276,6 @@ body.cursor-hover .cursor-ring {
   margin: 0 2px;
 }
 
-/* Nav links */
 .nav-links {
   display: flex;
   align-items: center;
@@ -311,7 +306,6 @@ body.cursor-hover .cursor-ring {
 .nav-link.active::before {
   opacity: 1;
 }
-/* Underline effect */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -325,7 +319,6 @@ body.cursor-hover .cursor-ring {
   width: calc(100% - 24px);
 }
 
-/* Hamburger */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -350,6 +343,9 @@ body.cursor-hover .cursor-ring {
 
 /* ----------------------------------------------------------------
    8. HERO SECTION
+   — Removed: scan-line animation, hud-orb pulse animation
+   — Reduced: glitch frequency (fires once every ~10s instead of 4s)
+   — Kept: cursor blink, float scroll-hint, role typing
 ---------------------------------------------------------------- */
 #hero {
   position: relative;
@@ -362,16 +358,15 @@ body.cursor-hover .cursor-ring {
   z-index: 1;
 }
 
-/* Radial glow in center */
 #hero::before {
   content: '';
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(0, 255, 157, 0.06) 0%, transparent 70%);
+  width: 600px;              /* was 700px */
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 255, 157, 0.05) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -383,7 +378,6 @@ body.cursor-hover .cursor-ring {
   padding-top: 80px;
 }
 
-/* Terminal line */
 .terminal-line {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -402,10 +396,10 @@ body.cursor-hover .cursor-ring {
 }
 @keyframes blink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  50%       { opacity: 0; }
 }
 
-/* Hero name with glitch effect */
+/* Hero name */
 .hero-name {
   font-size: clamp(2.4rem, 7vw, 5rem);
   font-weight: 800;
@@ -417,40 +411,35 @@ body.cursor-hover .cursor-ring {
   position: relative;
 }
 
-/* GLITCH effect on the name */
-.glitch {
-  position: relative;
-}
+/* GLITCH — reduced to fire rarely (~every 10s) with lighter clip offsets */
+.glitch { position: relative; }
 .glitch::before,
 .glitch::after {
   content: attr(data-text);
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   opacity: 0;
 }
 .glitch::before {
   color: var(--cyan);
-  animation: glitch-1 4s infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  animation: glitch-1 10s infinite;   /* was 4s */
+  clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
 }
 .glitch::after {
   color: var(--red-accent);
-  animation: glitch-2 4s infinite;
-  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  animation: glitch-2 10s infinite;   /* was 4s */
+  clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
 }
 @keyframes glitch-1 {
-  0%, 85%, 100% { opacity: 0; transform: none; }
-  87%           { opacity: 0.8; transform: translate(-4px, 2px); }
-  89%           { opacity: 0.8; transform: translate(4px, -2px); }
-  91%           { opacity: 0; transform: none; }
+  0%, 93%, 100% { opacity: 0; transform: none; }
+  94%           { opacity: 0.7; transform: translate(-3px, 1px); }   /* softer offset */
+  96%           { opacity: 0; transform: none; }
 }
 @keyframes glitch-2 {
-  0%, 88%, 100% { opacity: 0; transform: none; }
-  90%           { opacity: 0.7; transform: translate(4px, 2px); }
-  92%           { opacity: 0.7; transform: translate(-4px, -2px); }
-  94%           { opacity: 0; transform: none; }
+  0%, 95%, 100% { opacity: 0; transform: none; }
+  96%           { opacity: 0.6; transform: translate(3px, 1px); }
+  98%           { opacity: 0; transform: none; }
 }
 
 /* Role dynamic text */
@@ -467,7 +456,6 @@ body.cursor-hover .cursor-ring {
   animation: blink 0.8s step-end infinite;
 }
 
-/* Tagline */
 .hero-tagline {
   font-size: 1.05rem;
   color: var(--text-secondary);
@@ -476,7 +464,6 @@ body.cursor-hover .cursor-ring {
   line-height: 1.8;
 }
 
-/* CTA buttons */
 .hero-cta {
   display: flex;
   gap: 16px;
@@ -485,22 +472,9 @@ body.cursor-hover .cursor-ring {
   margin-bottom: 40px;
 }
 
-/* Scan line animation */
-.scan-line {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--green), transparent);
-  animation: scan 4s linear infinite;
-  opacity: 0.4;
-}
-@keyframes scan {
-  0%   { top: 0; }
-  100% { top: 100%; }
-}
+/* SCAN LINE — removed entirely (was a full-page gradient sweep every 4s) */
 
-/* HUD orbs */
+/* HUD ORBS — kept visually but removed the pulse animation */
 .hud-orb {
   position: absolute;
   width: 180px;
@@ -508,23 +482,21 @@ body.cursor-hover .cursor-ring {
   border-radius: 50%;
   border: 1px solid var(--border);
   pointer-events: none;
+  opacity: 0.35;             /* static opacity instead of animated */
 }
 .hud-orb--tl {
   top: 15%; left: 5%;
-  box-shadow: inset 0 0 40px rgba(0,255,157,0.04);
-  animation: orb-pulse 6s ease-in-out infinite;
+  box-shadow: inset 0 0 30px rgba(0,255,157,0.03);
+  /* removed orb-pulse animation */
 }
 .hud-orb--br {
   bottom: 15%; right: 5%;
   width: 120px; height: 120px;
-  animation: orb-pulse 8s ease-in-out infinite reverse;
+  /* removed orb-pulse animation */
 }
-@keyframes orb-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50%       { transform: scale(1.1); opacity: 0.8; }
-}
+/* orb-pulse keyframe removed */
 
-/* Scroll hint */
+/* Scroll hint — float kept (subtle, cheap) */
 .scroll-hint {
   position: absolute;
   bottom: 30px;
@@ -538,11 +510,11 @@ body.cursor-hover .cursor-ring {
   align-items: center;
   gap: 6px;
   letter-spacing: 2px;
-  animation: float 2s ease-in-out infinite;
+  animation: float 2.5s ease-in-out infinite;  /* was 2s — slightly slower */
 }
 @keyframes float {
   0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(6px); }
+  50%       { transform: translateX(-50%) translateY(5px); }  /* was 6px */
 }
 
 /* ----------------------------------------------------------------
@@ -555,7 +527,6 @@ body.cursor-hover .cursor-ring {
   align-items: center;
 }
 
-/* Avatar frame */
 .about-visual {
   display: flex;
   justify-content: center;
@@ -577,7 +548,7 @@ body.cursor-hover .cursor-ring {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 40px var(--green-glow), inset 0 0 30px rgba(0,255,157,0.05);
+  box-shadow: 0 0 30px var(--green-glow), inset 0 0 20px rgba(0,255,157,0.04);  /* reduced */
   position: relative;
   z-index: 2;
 }
@@ -586,12 +557,12 @@ body.cursor-hover .cursor-ring {
   color: var(--green);
 }
 
-/* Orbit ring (SVG text path) */
+/* Orbit ring — slowed down significantly */
 .orbit-ring {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  animation: spin 20s linear infinite;
+  animation: spin 40s linear infinite;   /* was 20s — halved RPM */
 }
 .orbit-text {
   font-family: var(--font-mono);
@@ -601,7 +572,6 @@ body.cursor-hover .cursor-ring {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Corner accents on avatar */
 .corner {
   position: absolute;
   width: 14px; height: 14px;
@@ -613,7 +583,6 @@ body.cursor-hover .cursor-ring {
 .corner.bl { bottom: 8px; left: 8px;  border-width: 0 0 2px 2px; }
 .corner.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
 
-/* About text */
 .about-lead {
   font-size: 1.15rem;
   font-weight: 600;
@@ -626,7 +595,6 @@ body.cursor-hover .cursor-ring {
   font-size: 0.97rem;
 }
 
-/* Stat cards */
 .about-stats {
   display: flex;
   gap: 16px;
@@ -647,7 +615,7 @@ body.cursor-hover .cursor-ring {
 }
 .stat-card:hover {
   border-color: var(--green);
-  box-shadow: 0 0 12px var(--green-glow);
+  box-shadow: 0 0 10px var(--green-glow);   /* was 12px */
 }
 .stat-icon { color: var(--green); font-size: 1rem; }
 
@@ -669,7 +637,6 @@ body.cursor-hover .cursor-ring {
   position: relative;
   overflow: hidden;
 }
-/* Top edge glow on hover */
 .skill-card::before {
   content: '';
   position: absolute;
@@ -683,8 +650,8 @@ body.cursor-hover .cursor-ring {
 .skill-card:hover::before { transform: scaleX(1); }
 .skill-card:hover {
   border-color: var(--green);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0,255,157,0.1);
+  transform: translateY(-3px);          /* was -4px */
+  box-shadow: 0 6px 24px rgba(0,255,157,0.09);  /* was 8px/30px/0.1 */
 }
 
 .skill-icon-wrap {
@@ -707,7 +674,6 @@ body.cursor-hover .cursor-ring {
   margin-bottom: 16px;
 }
 
-/* Skill progress bar */
 .skill-bar-wrap {
   width: 100%;
   height: 4px;
@@ -717,11 +683,11 @@ body.cursor-hover .cursor-ring {
 }
 .skill-bar {
   height: 100%;
-  width: 0;               /* animated by JS */
+  width: 0;
   background: linear-gradient(90deg, var(--green), var(--cyan));
   border-radius: 2px;
-  transition: width 1.2s ease;
-  box-shadow: 0 0 8px var(--green-glow);
+  transition: width 1s ease;            /* was 1.2s */
+  /* Removed box-shadow glow on the bar */
 }
 
 /* ----------------------------------------------------------------
@@ -733,7 +699,6 @@ body.cursor-hover .cursor-ring {
   margin: 0 auto;
 }
 
-/* Central vertical line */
 .timeline::before {
   content: '';
   position: absolute;
@@ -752,7 +717,6 @@ body.cursor-hover .cursor-ring {
   align-items: start;
 }
 
-/* Card placement: left items fill col 1, right items fill col 3 */
 .timeline-item[data-side="left"]  .timeline-card { grid-column: 1; grid-row: 1; text-align: right; padding-right: 28px; }
 .timeline-item[data-side="left"]  .timeline-dot  { grid-column: 2; grid-row: 1; }
 .timeline-item[data-side="left"]  .timeline-card ~ * { grid-column: 3; }
@@ -760,7 +724,6 @@ body.cursor-hover .cursor-ring {
 .timeline-item[data-side="right"] .timeline-card { grid-column: 3; grid-row: 1; padding-left: 28px; }
 .timeline-item[data-side="right"] .timeline-dot  { grid-column: 2; grid-row: 1; }
 
-/* Dot */
 .timeline-dot {
   width: 44px;
   height: 44px;
@@ -772,7 +735,7 @@ body.cursor-hover .cursor-ring {
   justify-content: center;
   color: var(--green);
   font-size: 0.95rem;
-  box-shadow: 0 0 14px var(--green-glow);
+  box-shadow: 0 0 10px var(--green-glow);   /* was 14px */
   z-index: 2;
   position: relative;
   margin-top: 10px;
@@ -781,15 +744,15 @@ body.cursor-hover .cursor-ring {
 .timeline-dot.active {
   background: var(--green);
   color: var(--bg-primary);
-  box-shadow: 0 0 24px var(--green);
-  animation: pulse-dot 2s ease-in-out infinite;
+  box-shadow: 0 0 18px var(--green);        /* was 24px */
+  animation: pulse-dot 3s ease-in-out infinite;  /* was 2s */
 }
+/* Simplified pulse — single shadow value, no double glow */
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 16px var(--green); }
-  50%       { box-shadow: 0 0 40px var(--green), 0 0 60px rgba(0,255,157,0.3); }
+  0%, 100% { box-shadow: 0 0 12px var(--green); }
+  50%       { box-shadow: 0 0 28px var(--green); }   /* was 40px + 60px second shadow */
 }
 
-/* Card */
 .timeline-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -800,7 +763,7 @@ body.cursor-hover .cursor-ring {
 .timeline-card:hover,
 .active-card {
   border-color: var(--green);
-  box-shadow: 0 4px 20px rgba(0,255,157,0.1);
+  box-shadow: 0 4px 16px rgba(0,255,157,0.08);  /* was 20px/0.1 */
 }
 .timeline-phase {
   font-family: var(--font-mono);
@@ -860,8 +823,8 @@ body.cursor-hover .cursor-ring {
 }
 .project-card:hover {
   border-color: var(--green);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,255,157,0.1);
+  transform: translateY(-3px);           /* was -4px */
+  box-shadow: 0 8px 24px rgba(0,255,157,0.09);  /* was 10px/30px/0.1 */
 }
 
 .project-header {
@@ -904,7 +867,6 @@ body.cursor-hover .cursor-ring {
   color: var(--green);
 }
 
-/* Coming soon card */
 .coming-soon-card {
   grid-column: 1 / -1;
   background: var(--bg-card);
@@ -935,10 +897,10 @@ body.cursor-hover .cursor-ring {
   width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--green);
-  animation: dot-blink 1.4s ease-in-out infinite;
+  animation: dot-blink 1.8s ease-in-out infinite;  /* was 1.4s */
 }
-.cs-dots span:nth-child(2) { animation-delay: 0.2s; }
-.cs-dots span:nth-child(3) { animation-delay: 0.4s; }
+.cs-dots span:nth-child(2) { animation-delay: 0.3s; }   /* was 0.2s */
+.cs-dots span:nth-child(3) { animation-delay: 0.6s; }   /* was 0.4s */
 @keyframes dot-blink {
   0%, 100% { opacity: 0.2; }
   50%       { opacity: 1; }
@@ -965,7 +927,7 @@ body.cursor-hover .cursor-ring {
 }
 .cert-card:hover {
   border-color: var(--cyan);
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.08);  /* was 20px/0.1 */
 }
 
 .cert-badge {
@@ -1061,7 +1023,6 @@ body.cursor-hover .cursor-ring {
 }
 .contact-value:hover { color: var(--green); }
 
-/* Social buttons */
 .social-links {
   display: flex;
   gap: 12px;
@@ -1081,11 +1042,10 @@ body.cursor-hover .cursor-ring {
 .social-btn:hover {
   border-color: var(--green);
   color: var(--green);
-  box-shadow: 0 0 12px var(--green-glow);
+  box-shadow: 0 0 10px var(--green-glow);  /* was 12px */
   transform: translateY(-2px);
 }
 
-/* Contact form */
 .contact-form-wrap {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -1187,7 +1147,7 @@ body.cursor-hover .cursor-ring {
 .back-to-top:hover {
   border-color: var(--green);
   color: var(--green);
-  box-shadow: 0 0 12px var(--green-glow);
+  box-shadow: 0 0 10px var(--green-glow);   /* was 12px */
 }
 
 /* ----------------------------------------------------------------
@@ -1196,7 +1156,6 @@ body.cursor-hover .cursor-ring {
 @media (max-width: 900px) {
   :root { --section-pad: 70px; }
 
-  /* Nav */
   .hamburger { display: flex; }
   .nav-links {
     position: fixed;
@@ -1214,7 +1173,6 @@ body.cursor-hover .cursor-ring {
   .nav-links.open { right: 0; }
   .nav-link { font-size: 0.9rem; padding: 10px 0; }
 
-  /* About */
   .about-grid {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1222,7 +1180,6 @@ body.cursor-hover .cursor-ring {
   }
   .about-stats { justify-content: center; }
 
-  /* Timeline: single column */
   .timeline::before { left: 22px; }
   .timeline-item {
     grid-template-columns: 44px 1fr;
@@ -1242,7 +1199,6 @@ body.cursor-hover .cursor-ring {
   }
   .timeline-item[data-side="left"]  .timeline-tags { justify-content: flex-start; }
 
-  /* Contact */
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1275,89 +1231,3 @@ body.cursor-hover .cursor-ring {
 
   .hud-orb { display: none; }
 }
-  
-  /* Body Styles */
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    line-height: 1.6;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-  
-  /* Container */
-  .container {
-    width: 90%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 20px 0;
-  }
-  
-  /* Header */
-  header {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
-  }
-  
-  header h1 {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  
-  nav {
-    text-align: center;
-  }
-  
-  nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Sections */
-  .section {
-    padding: 40px 0;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  /* Projects */
-  .project {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-left: 4px solid #0077cc;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  }
-  
-  .project h3 {
-    margin-bottom: 10px;
-  }
-  
-  .project a {
-    color: #0077cc;
-    text-decoration: none;
-  }
-  
-  .project a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Footer */
-  footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 40px;
-  }
-  
