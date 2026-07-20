@@ -166,7 +166,7 @@
 (function initHeroTyping() {
   // --- Terminal command ---
   const cmdEl   = document.getElementById('typed-cmd');
-  const command = 'whoami --verbose';
+  const command = 'whoam---';
   let i = 0;
 
   function typeCommand() {
